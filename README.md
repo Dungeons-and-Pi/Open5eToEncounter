@@ -20,6 +20,10 @@ Currently, I use [GitHub Pages](https://pages.github.com/) for hosting this simp
 
 Copy and paste from the "results" object without brackets. Double check that the json is vaild with [jsonformatter.curiousconcept.com](https://jsonformatter.curiousconcept.com/) by adding brackets. Supports multiple spells. 
 
+Control-F these terms:
+* `- `
+* `\xAD`
+
 ## Contributing
 
 Pull requests are welcome. If you find any problem(s) in this webapp, feel free to submit an issue. This includes stuff like vulnerabilities, or even the most trivial issues (such as typoes.) If you know how to fix an issue, feel free to make a pull request for the issue. If you would like to suggest a feature or change, submit it as an issue as well; it will be given the appropriate tag once we have seen it. We love to discuss any major changes with you.
