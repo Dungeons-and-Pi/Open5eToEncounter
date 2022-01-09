@@ -6,7 +6,8 @@ Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterP
 * [dungeons-and-pi.github.io/Open5eToEncounter/](https://dungeons-and-pi.github.io/Open5eToEncounter/)
 
 ## Built with
-* [json2yaml](https://github.com/jeffsu/json2yaml)
+* [jeffsu/json2yaml](https://github.com/jeffsu/json2yaml)
+* [g105b/markdown-to-html](https://github.com/g105b/markdown-to-html) - Modified
 * [Bootstrap](https://getbootstrap.com)
 
 ## Getting Started
