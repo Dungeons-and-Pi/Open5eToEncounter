@@ -1,6 +1,6 @@
 # Open5e To Encounter
 
-Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterPlus](https://apps.apple.com/us/app/encounterplus-for-d-d-5e/id1170693487).
+Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterPlus](https://encounter.plus/).
 
 ## Demos
 * [dungeons-and-pi.github.io/Open5eToEncounter/](https://dungeons-and-pi.github.io/Open5eToEncounter/)
