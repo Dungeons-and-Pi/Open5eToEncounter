@@ -13,7 +13,11 @@ Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterP
 
 **Anyway to host a website**
 
-Currently, I use [GitHub Pages](https://pages.github.com/) for hosting this simple webapp.
+Currently, I use [GitHub Pages](https://pages.github.com/) for hosting this simple webapp. 
+
+### For Spells
+
+Copy and paste from the "results" object without brackets. Double check that the json is vaild with [jsonformatter.curiousconcept.com](https://jsonformatter.curiousconcept.com/) by adding brackets. Supports multiple spells. 
 
 ## Contributing
 
