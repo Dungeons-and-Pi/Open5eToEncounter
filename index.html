@@ -10,17 +10,31 @@
             font-size: 12px;
             width: 100%;
         }
+        
+        body {
+            padding: 10px 16px 0px 16px;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3/dist/jquery.min.js"></script>
+    <script src="markdown-to-html.js"></script>
+    <script src="json2yaml.js"></script>
 </head>
 
 <body>
-    <h1>Convert Open5e to Encounter</h1>
+    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+        <img align="left" src="https://cdn.jsdelivr.net/gh/Dungeons-and-Pi/Open5e-EncounterModule/icon.png" alt="logo" height="42" width="42">
+        <h1>Convert Open5e to Encounter</h1>
+        <hr>
+    </div>
 
-    <h2>Spells</h2>
+    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+        <h2>Spells</h2>
+        <br>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col">
-                <textarea id="spells" name="spellData" rows="25" cols="50"></textarea>
+                <textarea id="spells" name="spellData" rows="25" cols="50" data-store="1"></textarea>
             </div>
             <div class="col-2 text-center">
                 <button type="button" onclick="multipleSpells()" class="btn btn-primary">Convert</button>
@@ -30,7 +44,6 @@
             </div>
         </div>
     </div>
-    <script src="json2yaml.js"></script>
     <script>
         function multipleSpells() {
             var dataArray = JSON.parse("[" + document.getElementById("spells").value + "]");
@@ -66,6 +79,8 @@
                 dataArray["ritual"] = false;
             }
 
+            dataArray["description"] = MarkdownToHtml.parse(dataArray["description"]);
+
             if (dataArray["higher_level"]) {
                 dataArray["description"] += `\n\n<b>At higher levels:</b> ${dataArray["higher_level"]}\n\n<b>Source:</b> ${dataArray["page"].toUpperCase()} from <a href='https://open5e.com/spells/${dataArray["slug"]}'>Open5e</a> project`;
             } else {
@@ -82,7 +97,7 @@
             delete dataArray["material"];
 
             var unformattedYaml = json2yaml(dataArray).replace().replace(/\\x0A\\x0A/g, "\n\n\n    ").replace(/\\x22/g, "\\\"");
-            var yaml = unformattedYaml.replace(/\\x20/g, " ").replace(/\\x2C/g, ",").replace(/\\x28/g, "(").replace(/\\x29/g, ")").replace(/\\x27/g, "'").replace(/\\x09/g, "    ").replace(/\\x0A/g, "\n").replace(/\\x3C/g, "<").replace(/\\x3E/g, ">").replace(/\\x3A/g, ":").replace(/\\x3D/g, "=");
+            var yaml = unformattedYaml.replace(/\\x20/g, " ").replace(/\\x2C/g, ",").replace(/\\x28/g, "(").replace(/\\x29/g, ")").replace(/\\x27/g, "'").replace(/\\x09/g, "    ").replace(/\\x0A/g, "\n").replace(/\\x3C/g, "<").replace(/\\x3E/g, ">").replace(/\\x3A/g, ":").replace(/\\x3D/g, "=").replace(/\\x3B/g, ";").replace(/\\xAD/g, "");
             //console.log(yaml);
             //document.getElementById("convertedSpell").value = yaml;
             return yaml;
@@ -92,6 +107,18 @@
             obj[newKey] = obj[oldKey];
             delete obj[oldKey];
         }
+    </script>
+    <script>
+        //Auto Save JSON Text Area with data-store
+        $(document).ready(function() {
+            $("*[data-store]").each(function() {
+                $(this).val(localStorage.getItem("item-" + $(this).attr("data-store")));
+            });
+
+            $("*[data-store]").on("keyup", function(itm) {
+                localStorage.setItem("item-" + $(this).attr("data-store"), $(this).val());
+            })
+        })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
