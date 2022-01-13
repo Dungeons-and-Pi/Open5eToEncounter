@@ -16,7 +16,7 @@ Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterP
 
 Currently, I use [GitHub Pages](https://pages.github.com/) for hosting this simple webapp. 
 
-### For Spells
+### [For Spells](https://dungeons-and-pi.github.io/Open5eToEncounter/#spell)
 
 Copy and paste from the "results" object without brackets. Double check that the json is vaild with [jsonformatter.curiousconcept.com](https://jsonformatter.curiousconcept.com/) by adding brackets. Supports multiple spells. 
 
