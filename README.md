@@ -16,6 +16,10 @@ Webapp to convert [Open5e](https://api.open5e.com/) json to yaml for [EncounterP
 
 Currently, I use [GitHub Pages](https://pages.github.com/) for hosting this simple webapp. 
 
+### [For Table of Contents](https://dungeons-and-pi.github.io/Open5eToEncounter/#table-of-contents-generator)
+
+Type the directory into the top textarea, then copy and paste from the "results" object without brackets. Double check that the json is vaild with [jsonformatter.curiousconcept.com](https://jsonformatter.curiousconcept.com/) by adding brackets. Works with all types of JSON, need `slug` key.
+
 ### [For Spells](https://dungeons-and-pi.github.io/Open5eToEncounter/#spell)
 
 Copy and paste from the "results" object without brackets. Double check that the json is vaild with [jsonformatter.curiousconcept.com](https://jsonformatter.curiousconcept.com/) by adding brackets. Supports multiple spells. 
@@ -23,6 +27,10 @@ Copy and paste from the "results" object without brackets. Double check that the
 Control-F these terms:
 * `- `
 * `\xAD`
+
+### [For Weapons](https://dungeons-and-pi.github.io/Open5eToEncounter/#weapon)
+
+Copy and paste from the "results" object without brackets.
 
 ## Contributing
 
