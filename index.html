@@ -21,20 +21,21 @@
 </head>
 
 <body>
-    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+    <div class="text-center">
         <img align="left" src="https://cdn.jsdelivr.net/gh/Dungeons-and-Pi/Open5e-EncounterModule/icon.png" alt="logo" height="42" width="42">
         <h1>Convert Open5e to Encounter</h1>
         <hr>
     </div>
 
-    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+    <div class="text-center">
         <h2>Table of Contents Generator</h2>
         <br>
     </div>
     <div class="container">
         <div class="row">
             <div class="col">
-                <textarea id="toc" name="tocData" rows="25" cols="50" data-store="1"></textarea>
+                <textarea id="dir" rows="2" cols="50" data-store="1"></textarea>
+                <textarea id="toc" name="tocData" rows="22" cols="50" data-store="2"></textarea>
             </div>
             <div class="col-2 text-center">
                 <button type="button" onclick="toc()" class="btn btn-primary">Convert</button>
@@ -44,16 +45,26 @@
             </div>
         </div>
     </div>
+    <script>
+        function toc() {
+            var dataArray = JSON.parse("[" + document.getElementById("toc").value + "]");
+            var file;
+            for (i = 0; i < dataArray.length; i++) {
+                file += "* [" + dataArray[i]["name"] + "](/" + document.getElementById("dir").value + "/" + dataArray[i]["slug"] + ")\n";
+            }
+            document.getElementById("convertedTOC").value = file.replace("undefined", "");
+        }
+    </script>
 
     <hr>
-    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
-        <h2>Spells</h2>
+    <div class="text-center">
+        <h2>Spell</h2>
         <br>
     </div>
     <div class="container">
         <div class="row">
             <div class="col">
-                <textarea id="spells" name="spellData" rows="25" cols="50" data-store="2"></textarea>
+                <textarea id="spells" name="spellData" rows="25" cols="50" data-store="3"></textarea>
             </div>
             <div class="col-2 text-center">
                 <button type="button" onclick="multipleSpells()" class="btn btn-primary">Convert</button>
@@ -64,15 +75,6 @@
         </div>
     </div>
     <script>
-        function toc() {
-            var dataArray = JSON.parse("[" + document.getElementById("toc").value + "]");
-            var file;
-            for (i = 0; i < dataArray.length; i++) {
-                file += "* [" + dataArray[i]["name"] + "](/spell/" + dataArray[i]["slug"] + ")\n";
-            }
-            document.getElementById("convertedTOC").value = file.replace("undefined", "");
-        }
-
         function multipleSpells() {
             var dataArray = JSON.parse("[" + document.getElementById("spells").value + "]");
             var file;
@@ -130,12 +132,173 @@
             //document.getElementById("convertedSpell").value = yaml;
             return yaml;
         }
+    </script>
 
-        function renameKey(obj, oldKey, newKey) {
-            obj[newKey] = obj[oldKey];
-            delete obj[oldKey];
+    <hr>
+    <div class="text-center">
+        <h2>Weapon</h2>
+        <br>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <textarea id="weapons" name="weaponData" rows="25" cols="50" data-store="3"></textarea>
+            </div>
+            <div class="col-2 text-center">
+                <button type="button" onclick="multipleWeapons()" class="btn btn-primary">Convert</button>
+            </div>
+            <div class="col">
+                <textarea id="convertedWeapon" rows="25" cols="50"></textarea>
+            </div>
+        </div>
+    </div>
+    <script>
+        function multipleWeapons() {
+            var dataArray = JSON.parse("[" + document.getElementById("weapons").value + "]");
+            var file;
+            for (i = 0; i < dataArray.length; i++) {
+                file += "```Item\n" + convertWeapon(dataArray[i]) + "\n```\n\n";
+            }
+            document.getElementById("convertedWeapon").value = file.replace("undefined```Item", "```Item");
+        }
+
+        function convertWeapon(dataArray) {
+            renameKey(dataArray, "desc", "description");
+            renameKey(dataArray, "damage_dice", "primaryDamage");
+            renameKey(dataArray, "damage_type", "damageType");
+            renameKey(dataArray, "cost", "value");
+            delete dataArray["document__slug"];
+            delete dataArray["document__title"];
+            delete dataArray["document__license_url"];
+            delete dataArray["category"];
+            delete dataArray["slug"];
+
+            dataArray["type"] = "weapon";
+
+            if (dataArray["desciption"] != null) {
+                dataArray["description"] = MarkdownToHtml.parse(dataArray["description"]);
+                dataArray["description"] += `\n\n<b>Source:</b> <a href='https://open5e.com/sections/weapons'>Open5e</a> project`;
+            } else {
+                dataArray["description"] = `<b>Source:</b> <a href='https://open5e.com/sections/weapons'>Open5e</a> project`;
+            }
+
+            var unformattedYaml = json2yaml(dataArray).replace().replace(/\\x0A\\x0A/g, "\n\n\n    ").replace(/\\x22/g, "\\\"");
+            var yaml = unformattedYaml.replace(/\\x20/g, " ").replace(/\\x2C/g, ",").replace(/\\x28/g, "(").replace(/\\x29/g, ")").replace(/\\x27/g, "'").replace(/\\x09/g, "    ").replace(/\\x0A/g, "\n").replace(/\\x3C/g, "<").replace(/\\x3E/g, ">").replace(/\\x3A/g, ":").replace(/\\x3D/g, "=").replace(/\\x3B/g, ";");
+            return yaml;
         }
     </script>
+
+    <hr>
+    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+        <h2>Magic Items</h2>
+        <br>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <textarea id="magicitems" rows="25" cols="50" data-store="4"></textarea>
+            </div>
+            <div class="col-2 text-center">
+                <button type="button" onclick="multipleMagicitems()" class="btn btn-primary">Convert</button>
+            </div>
+            <div class="col">
+                <textarea id="convertedMagicitems" rows="25" cols="50"></textarea>
+            </div>
+        </div>
+    </div>
+    <script>
+        function multipleMagicitems() {
+            var dataArray = JSON.parse("[" + document.getElementById("magicitems").value + "]");
+            var file;
+            for (i = 0; i < dataArray.length; i++) {
+                file += "```Item\n" + convertWeapon(dataArray[i]) + "\n```\n\n";
+            }
+            document.getElementById("convertedMagicitems").value = file.replace("undefined```Item", "```Item");
+        }
+
+        function convertMagicitemse(dataArray) {
+            renameKey(dataArray, "desc", "description");
+            renameKey(dataArray, "cost", "value");
+            delete dataArray["document__slug"];
+            delete dataArray["document__title"];
+            delete dataArray["category"];
+            delete dataArray["slug"];
+
+            dataArray["type"] = "weapon";
+
+            if (dataArray["desciption"] != null) {
+                dataArray["description"] = MarkdownToHtml.parse(dataArray["description"]);
+                dataArray["description"] += `\n\n<b>Source:</b> <a href='https://open5e.com/sections/weapons'>Open5e</a> project`;
+            } else {
+                dataArray["description"] = `<b>Source:</b> <a href='https://open5e.com/sections/weapons'>Open5e</a> project`;
+            }
+
+            var unformattedYaml = json2yaml(dataArray).replace().replace(/\\x0A\\x0A/g, "\n\n\n    ").replace(/\\x22/g, "\\\"");
+            var yaml = unformattedYaml.replace(/\\x20/g, " ").replace(/\\x2C/g, ",").replace(/\\x28/g, "(").replace(/\\x29/g, ")").replace(/\\x27/g, "'").replace(/\\x09/g, "    ").replace(/\\x0A/g, "\n").replace(/\\x3C/g, "<").replace(/\\x3E/g, ">").replace(/\\x3A/g, ":").replace(/\\x3D/g, "=").replace(/\\x3B/g, ";");
+            return yaml;
+        }
+    </script>
+
+    <hr>
+    <div align="center" style="display: block; margin-left: auto; margin-right: auto;">
+        <h2>Monsters (Not Done)</h2>
+        <br>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <textarea id="monster" name="monsterData" rows="25" cols="50" data-store="6"></textarea>
+            </div>
+            <div class="col-2 text-center">
+                <button type="button" onclick="multipleMonsters()" class="btn btn-primary">Convert</button>
+            </div>
+            <div class="col">
+                <textarea id="convertedMonster" rows="25" cols="50"></textarea>
+            </div>
+        </div>
+    </div>
+    <script>
+        function multipleMonsters() {
+            var dataArray = JSON.parse("[" + document.getElementById("monster").value + "]");
+            var file;
+            for (i = 0; i < dataArray.length; i++) {
+                file += "```Monster{.two-column}\n" + convertMonster(dataArray[i]) + "\n```\n\n";
+            }
+            document.getElementById("convertedMonster").value = file.replace("undefined```Monster{.two-column}", "```Monster{.two-column}");
+        }
+
+        function convertMonster(dataArray) {
+            renameKey(dataArray, "armor_class", "ac");
+
+            //Hp
+            renameKey(dataArray, "hit_points", "hp");
+            dataArray["hp"] += " (" + dataArray["hit_dice"] + ")";
+            delete dataArray["hit_dice"];
+
+            //Speed Fixing
+            renameKey(dataArray, "strength", "str");
+            renameKey(dataArray, "dexterity", "dex");
+            renameKey(dataArray, "constitution", "con");
+            renameKey(dataArray, "intelligence", "int");
+            renameKey(dataArray, "wisdom", "wis");
+            renameKey(dataArray, "charisma", "char");
+            //Save Fixing
+            //Skills Fixing
+            delete dataArray["document__license_url"];
+            delete dataArray["document__title"];
+            delete dataArray["document__slug"];
+
+            dataArray["description"] = MarkdownToHtml.parse(dataArray["description"]);
+            //dataArray["description"] += `\n\n<b>Source:</b> ${dataArray["page"].toUpperCase()} from <a href='https://open5e.com/monsters/${dataArray["slug"]}'>Open5e</a> project`;
+
+            var unformattedYaml = json2yaml(dataArray).replace().replace(/\\x0A\\x0A/g, "\n\n\n    ").replace(/\\x22/g, "\\\"");
+            var yaml = unformattedYaml.replace(/\\x20/g, " ").replace(/\\x2C/g, ",").replace(/\\x28/g, "(").replace(/\\x29/g, ")").replace(/\\x27/g, "'").replace(/\\x09/g, "    ").replace(/\\x0A/g, "\n").replace(/\\x3C/g, "<").replace(/\\x3E/g, ">").replace(/\\x3A/g, ":").replace(/\\x3D/g, "=").replace(/\\x3B/g, ";");
+            //console.log(yaml);
+            //document.getElementById("convertedSpell").value = yaml;
+            return yaml;
+        }
+    </script>
+
     <script>
         //Auto Save JSON Text Area with data-store
         $(document).ready(function() {
@@ -147,8 +310,17 @@
                 localStorage.setItem("item-" + $(this).attr("data-store"), $(this).val());
             })
         })
+
+        function renameKey(obj, oldKey, newKey) {
+            obj[newKey] = obj[oldKey];
+            delete obj[oldKey];
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>
+        anchors.add();
+    </script>
 </body>
 
 </html>
